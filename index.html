@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlexiGrid Studio // Interactive Grid & Flexbox Constructor</title>
+  <!-- Google Fonts: Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="dark-theme">
+  <!-- Top Navigation Bar -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-icon">
+        <i data-lucide="layout"></i>
+      </div>
+      <div class="logo-text">
+        <span class="logo-brand">FlexiGrid</span>
+        <span class="logo-sub">Studio</span>
+      </div>
+    </div>
+
+    <!-- Mode Selector Tabs -->
+    <div class="layout-mode-selector">
+      <button id="mode-grid-btn" class="mode-tab active" data-mode="grid">
+        <i data-lucide="grid"></i>
+        <span>CSS Grid</span>
+      </button>
+      <button id="mode-flex-btn" class="mode-tab" data-mode="flex">
+        <i data-lucide="columns-3"></i>
+        <span>Flexbox</span>
+      </button>
+    </div>
+
+    <!-- Actions -->
+    <div class="header-actions">
+      <div class="preset-selector-container">
+        <button id="presets-menu-btn" class="action-btn">
+          <i data-lucide="layout-template"></i>
+          <span>Presets</span>
+          <i data-lucide="chevron-down" class="chevron"></i>
+        </button>
+        <div id="presets-dropdown" class="presets-dropdown hidden">
+          <div class="dropdown-header">Grid Presets</div>
+          <button class="preset-item" data-preset="holy-grail">
+            <i data-lucide="panel-top"></i>
+            <div>
+              <div class="preset-title">Holy Grail Layout</div>
+              <div class="preset-desc">Header, sidebar, content, right-bar, footer</div>
+            </div>
+          </button>
+          <button class="preset-item" data-preset="dashboard">
+            <i data-lucide="layout-dashboard"></i>
+            <div>
+              <div class="preset-title">Dashboard Grid</div>
+              <div class="preset-desc">Sidebar, top-bar, and modular cards</div>
+            </div>
+          </button>
+          <button class="preset-item" data-preset="photo-gallery">
+            <i data-lucide="image"></i>
+            <div>
+              <div class="preset-title">Staggered Gallery</div>
+              <div class="preset-desc">Masonry-like grid using spans</div>
+            </div>
+          </button>
+          <div class="dropdown-header">Flexbox Presets</div>
+          <button class="preset-item" data-preset="flex-cards">
+            <i data-lucide="credit-card"></i>
+            <div>
+              <div class="preset-title">Responsive Cards</div>
+              <div class="preset-desc">Wrap flex cards with equal gap</div>
+            </div>
+          </button>
+          <button class="preset-item" data-preset="flex-centered">
+            <i data-lucide="align-center"></i>
+            <div>
+              <div class="preset-title">Centered Hero</div>
+              <div class="preset-desc">Perfect vertical and horizontal alignment</div>
+            </div>
+          </button>
+        </div>
+      </div>
+      
+      <button id="reset-layout-btn" class="action-btn danger">
+        <i data-lucide="rotate-ccw"></i>
+        <span>Reset</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Application Wrapper -->
+  <main class="app-container">
+    
+    <!-- Left Sidebar: Controls -->
+    <aside class="sidebar-controls">
+      <!-- Container Properties Section -->
+      <div class="control-section">
+        <div class="section-title">
+          <i data-lucide="settings"></i>
+          <span>Container Properties</span>
+        </div>
+        <div class="section-content">
+          <!-- Grid Specific Controls -->
+          <div id="grid-controls-group" class="controls-group">
+            <div class="control-row">
+              <label for="grid-cols-input">Columns</label>
+              <div class="stepper-input">
+                <button type="button" class="step-btn" data-target="grid-cols-input" data-action="dec">-</button>
+                <input type="number" id="grid-cols-input" min="1" max="12" value="3">
+                <button type="button" class="step-btn" data-target="grid-cols-input" data-action="inc">+</button>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label for="grid-rows-input">Rows</label>
+              <div class="stepper-input">
+                <button type="button" class="step-btn" data-target="grid-rows-input" data-action="dec">-</button>
+                <input type="number" id="grid-rows-input" min="1" max="12" value="3">
+                <button type="button" class="step-btn" data-target="grid-rows-input" data-action="inc">+</button>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Column Gap</label>
+              <div class="range-with-value">
+                <input type="range" id="grid-col-gap" min="0" max="64" value="16">
+                <span class="range-val" id="grid-col-gap-val">16px</span>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Row Gap</label>
+              <div class="range-with-value">
+                <input type="range" id="grid-row-gap" min="0" max="64" value="16">
+                <span class="range-val" id="grid-row-gap-val">16px</span>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Padding</label>
+              <div class="range-with-value">
+                <input type="range" id="grid-padding" min="0" max="64" value="16">
+                <span class="range-val" id="grid-padding-val">16px</span>
+              </div>
+            </div>
+
+            <div class="control-row stack">
+              <label for="grid-justify-items">Justify Items (Horizontal)</label>
+              <select id="grid-justify-items" class="select-input">
+                <option value="stretch" selected>stretch (Default)</option>
+                <option value="start">start</option>
+                <option value="end">end</option>
+                <option value="center">center</option>
+              </select>
+            </div>
+
+            <div class="control-row stack">
+              <label for="grid-align-items">Align Items (Vertical)</label>
+              <select id="grid-align-items" class="select-input">
+                <option value="stretch" selected>stretch (Default)</option>
+                <option value="start">start</option>
+                <option value="end">end</option>
+                <option value="center">center</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Flexbox Specific Controls -->
+          <div id="flex-controls-group" class="controls-group hidden">
+            <div class="control-row stack">
+              <label>Flex Direction</label>
+              <div class="segmented-control" id="flex-direction-segment">
+                <button class="segment-btn active" data-value="row" title="Row">
+                  <i data-lucide="arrow-right"></i>
+                </button>
+                <button class="segment-btn" data-value="row-reverse" title="Row Reverse">
+                  <i data-lucide="arrow-left"></i>
+                </button>
+                <button class="segment-btn" data-value="column" title="Column">
+                  <i data-lucide="arrow-down"></i>
+                </button>
+                <button class="segment-btn" data-value="column-reverse" title="Column Reverse">
+                  <i data-lucide="arrow-up"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="control-row stack">
+              <label>Flex Wrap</label>
+              <div class="segmented-control" id="flex-wrap-segment">
+                <button class="segment-btn active" data-value="nowrap" title="No Wrap">NoWrap</button>
+                <button class="segment-btn" data-value="wrap" title="Wrap">Wrap</button>
+                <button class="segment-btn" data-value="wrap-reverse" title="Wrap Reverse">Wrap-R</button>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Gap</label>
+              <div class="range-with-value">
+                <input type="range" id="flex-gap" min="0" max="64" value="16">
+                <span class="range-val" id="flex-gap-val">16px</span>
+              </div>
+            </div>
+
+            <div class="control-row">
+              <label>Padding</label>
+              <div class="range-with-value">
+                <input type="range" id="flex-padding" min="0" max="64" value="16">
+                <span class="range-val" id="flex-padding-val">16px</span>
+              </div>
+            </div>
+
+            <div class="control-row stack">
+              <label for="flex-justify-content">Justify Content (Main Axis)</label>
+              <select id="flex-justify-content" class="select-input">
+                <option value="flex-start" selected>flex-start</option>
+                <option value="flex-end">flex-end</option>
+                <option value="center">center</option>
+                <option value="space-between">space-between</option>
+                <option value="space-around">space-around</option>
+                <option value="space-evenly">space-evenly</option>
+              </select>
+            </div>
+
+            <div class="control-row stack">
+              <label for="flex-align-items">Align Items (Cross Axis)</label>
+              <select id="flex-align-items" class="select-input">
+                <option value="stretch" selected>stretch</option>
+                <option value="flex-start">flex-start</option>
+                <option value="flex-end">flex-end</option>
+                <option value="center">center</option>
+                <option value="baseline">baseline</option>
+              </select>
+            </div>
+
+            <div class="control-row stack">
+              <label for="flex-align-content">Align Content (Multi-line)</label>
+              <select id="flex-align-content" class="select-input">
+                <option value="stretch" selected>stretch</option>
+                <option value="flex-start">flex-start</option>
+                <option value="flex-end">flex-end</option>
+                <option value="center">center</option>
+                <option value="space-between">space-between</option>
+                <option value="space-around">space-around</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item Controls (Selected Item Settings) -->
+      <div class="control-section selected-item-section">
+        <div class="section-title">
+          <i data-lucide="info"></i>
+          <span>Item Configuration</span>
+        </div>
+        <div class="section-content">
+          <div id="no-item-selected-msg" class="info-message">
+            <i data-lucide="mouse-pointer-click"></i>
+            <p>Click on any layout item in the canvas to configure its individual CSS rules.</p>
+          </div>
+
+          <div id="item-settings-panel" class="item-settings-panel hidden">
+            <div class="selected-item-summary">
+              <div class="item-badge" id="selected-item-color-badge"></div>
+              <span class="item-name" id="selected-item-title">Item 1</span>
+              <button id="delete-item-btn" class="delete-btn" title="Delete Item">
+                <i data-lucide="trash-2"></i>
+              </button>
+            </div>
+
+            <!-- Grid Item Properties -->
+            <div id="grid-item-settings" class="item-properties">
+              <div class="control-row">
+                <label>Col Start / End</label>
+                <div class="multi-stepper">
+                  <input type="number" id="item-col-start" min="1" max="12" value="1">
+                  <span>/</span>
+                  <input type="number" id="item-col-end" min="1" max="13" value="2">
+                </div>
+              </div>
+
+              <div class="control-row">
+                <label>Row Start / End</label>
+                <div class="multi-stepper">
+                  <input type="number" id="item-row-start" min="1" max="12" value="1">
+                  <span>/</span>
+                  <input type="number" id="item-row-end" min="1" max="13" value="2">
+                </div>
+              </div>
+
+              <div class="control-row stack">
+                <label for="item-grid-justify-self">Justify Self</label>
+                <select id="item-grid-justify-self" class="select-input">
+                  <option value="auto" selected>auto</option>
+                  <option value="stretch">stretch</option>
+                  <option value="start">start</option>
+                  <option value="end">end</option>
+                  <option value="center">center</option>
+                </select>
+              </div>
+
+              <div class="control-row stack">
+                <label for="item-grid-align-self">Align Self</label>
+                <select id="item-grid-align-self" class="select-input">
+                  <option value="auto" selected>auto</option>
+                  <option value="stretch">stretch</option>
+                  <option value="start">start</option>
+                  <option value="end">end</option>
+                  <option value="center">center</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Flex Item Properties -->
+            <div id="flex-item-settings" class="item-properties hidden">
+              <div class="control-row">
+                <label for="item-flex-grow">Flex Grow</label>
+                <div class="stepper-input">
+                  <button type="button" class="step-btn" data-target="item-flex-grow" data-action="dec">-</button>
+                  <input type="number" id="item-flex-grow" min="0" max="100" value="0">
+                  <button type="button" class="step-btn" data-target="item-flex-grow" data-action="inc">+</button>
+                </div>
+              </div>
+
+              <div class="control-row">
+                <label for="item-flex-shrink">Flex Shrink</label>
+                <div class="stepper-input">
+                  <button type="button" class="step-btn" data-target="item-flex-shrink" data-action="dec">-</button>
+                  <input type="number" id="item-flex-shrink" min="0" max="100" value="1">
+                  <button type="button" class="step-btn" data-target="item-flex-shrink" data-action="inc">+</button>
+                </div>
+              </div>
+
+              <div class="control-row stack">
+                <label for="item-flex-basis">Flex Basis</label>
+                <div class="input-with-unit">
+                  <input type="text" id="item-flex-basis" value="auto" placeholder="e.g. auto, 200px, 20%">
+                </div>
+              </div>
+
+              <div class="control-row">
+                <label for="item-flex-order">Order</label>
+                <div class="stepper-input">
+                  <button type="button" class="step-btn" data-target="item-flex-order" data-action="dec">-</button>
+                  <input type="number" id="item-flex-order" value="0">
+                  <button type="button" class="step-btn" data-target="item-flex-order" data-action="inc">+</button>
+                </div>
+              </div>
+
+              <div class="control-row stack">
+                <label for="item-flex-align-self">Align Self</label>
+                <select id="item-flex-align-self" class="select-input">
+                  <option value="auto" selected>auto</option>
+                  <option value="stretch">stretch</option>
+                  <option value="flex-start">flex-start</option>
+                  <option value="flex-end">flex-end</option>
+                  <option value="center">center</option>
+                  <option value="baseline">baseline</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <button id="add-item-btn" class="add-item-btn">
+            <i data-lucide="plus"></i>
+            <span>Add New Item</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <section class="workspace-area">
+      <!-- Top Info bar -->
+      <div class="workspace-header">
+        <div class="workspace-title-info">
+          <h2>Layout Canvas</h2>
+          <span class="mode-badge" id="active-mode-badge">Grid Mode</span>
+        </div>
+        <div class="canvas-zoom">
+          <span id="canvas-dimensions">Container Size: 800px × 500px</span>
+        </div>
+      </div>
+
+      <!-- Canvas Container -->
+      <div class="canvas-container">
+        <!-- Interactive Layout Canvas -->
+        <div id="layout-canvas" class="layout-canvas grid-mode-active">
+          <!-- Dynamic Grid Lines & Handles (Grid Mode Only) -->
+          <div id="grid-lines-overlay" class="grid-lines-overlay"></div>
+          
+          <!-- Dynamic Items Container -->
+          <div id="items-container" class="items-container">
+            <!-- Items rendered dynamically via JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Code Inspector (Bottom Bar) -->
+      <div class="code-inspector">
+        <div class="inspector-tabs">
+          <button class="code-tab active" data-lang="css">
+            <i data-lucide="file-code"></i>
+            <span>Generated CSS</span>
+          </button>
+          <button class="code-tab" data-lang="html">
+            <i data-lucide="file-type-2"></i>
+            <span>Generated HTML</span>
+          </button>
+          <div class="spacer"></div>
+          <button id="copy-code-btn" class="copy-btn glow-btn">
+            <i data-lucide="copy"></i>
+            <span>Copy Code</span>
+          </button>
+        </div>
+        <div class="code-window">
+          <pre class="code-display"><code id="code-content" class="language-css">/* Rules will display here */</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Notification system -->
+  <div id="toast" class="toast hidden">
+    <i data-lucide="check-circle" class="toast-icon"></i>
+    <span id="toast-message">Layout copied!</span>
+  </div>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
