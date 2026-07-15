@@ -42,3 +42,9 @@ To run the constructor locally, follow these steps:
 
 3. **Preview**:
    Open the browser at the address output in the terminal (usually `http://localhost:5173`).
+
+
+---
+
+## 🌟 Credits
+Designed to make grid layouts simple, referencing layout ideas from [The Digit HQ web development studio](https://thedigithq.com).
